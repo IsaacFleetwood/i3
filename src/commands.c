@@ -142,6 +142,10 @@ static owindows_head owindows;
  *
  */
 void cmd_criteria_init(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     Con *con;
     owindow *ow;
 
@@ -168,6 +172,10 @@ void cmd_criteria_init(I3_CMD) {
  *
  */
 void cmd_criteria_match_windows(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     owindow *next, *current;
 
     DLOG("match specification finished, matching...\n");
@@ -251,6 +259,10 @@ void cmd_criteria_match_windows(I3_CMD) {
  *
  */
 void cmd_criteria_add(I3_CMD, const char *ctype, const char *cvalue) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     match_parse_property(current_match, ctype, cvalue);
 }
 
@@ -295,6 +307,10 @@ static void move_matches_to_workspace(Con *ws) {
  *
  */
 void cmd_move_con_to_workspace(I3_CMD, const char *which) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("which=%s\n", which);
 
     CHECK_MOVE_CON_TO_WORKSPACE;
@@ -328,6 +344,10 @@ void cmd_move_con_to_workspace(I3_CMD, const char *which) {
  *
  */
 void cmd_move_con_to_workspace_back_and_forth(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     Con *ws = workspace_back_and_forth_get();
     if (ws == NULL) {
         yerror("No workspace was previously active.");
@@ -348,6 +368,10 @@ void cmd_move_con_to_workspace_back_and_forth(I3_CMD) {
  *
  */
 void cmd_move_con_to_workspace_name(I3_CMD, const char *name, const char *no_auto_back_and_forth) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     if (strncasecmp(name, "__", strlen("__")) == 0) {
         yerror("You cannot move containers to i3-internal workspaces (\"%s\").", name);
         return;
@@ -375,6 +399,10 @@ void cmd_move_con_to_workspace_name(I3_CMD, const char *name, const char *no_aut
  *
  */
 void cmd_move_con_to_workspace_number(I3_CMD, const char *which, const char *no_auto_back_and_forth) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     CHECK_MOVE_CON_TO_WORKSPACE;
 
     LOG("should move window to workspace %s\n", which);
@@ -573,6 +601,10 @@ static bool cmd_resize_tiling_width_height(I3_CMD, Con *current, const char *dir
  *
  */
 void cmd_resize(I3_CMD, const char *way, const char *direction, long resize_px, long resize_ppt) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("resizing in way %s, direction %s, px %ld or ppt %ld\n", way, direction, resize_px, resize_ppt);
     if (strcmp(way, "shrink") == 0) {
         resize_px *= -1;
@@ -652,6 +684,10 @@ static bool resize_set_tiling(I3_CMD, Con *target, orientation_t resize_orientat
  *
  */
 void cmd_resize_set(I3_CMD, long cwidth, const char *mode_width, long cheight, const char *mode_height) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("resizing to %ld %s x %ld %s\n", cwidth, mode_width, cheight, mode_height);
     if (cwidth < 0 || cheight < 0) {
         yerror("Dimensions cannot be negative.");
@@ -725,6 +761,10 @@ static int border_width_from_style(border_style_t border_style, long border_widt
  *
  */
 void cmd_border(I3_CMD, const char *border_style_str, long border_width) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("border style should be changed to %s with border width %ld\n", border_style_str, border_width);
     owindow *current;
 
@@ -771,6 +811,10 @@ void cmd_nop(I3_CMD, const char *comment) {
  *
  */
 void cmd_append_layout(I3_CMD, const char *cpath) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     LOG("Appending layout \"%s\"\n", cpath);
 
     /* Make sure we allow paths like '~/.i3/layout.json' */
@@ -847,6 +891,10 @@ out:
  *
  */
 void cmd_workspace(I3_CMD, const char *which) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     Con *ws;
 
     DLOG("which=%s\n", which);
@@ -881,6 +929,10 @@ void cmd_workspace(I3_CMD, const char *which) {
  *
  */
 void cmd_workspace_number(I3_CMD, const char *which, const char *_no_auto_back_and_forth) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     const bool no_auto_back_and_forth = (_no_auto_back_and_forth != NULL);
 
     if (con_get_fullscreen_con(croot, CF_GLOBAL)) {
@@ -918,6 +970,10 @@ void cmd_workspace_number(I3_CMD, const char *which, const char *_no_auto_back_a
  *
  */
 void cmd_workspace_back_and_forth(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     if (con_get_fullscreen_con(croot, CF_GLOBAL)) {
         yerror("Cannot switch workspace while in global fullscreen");
         return;
@@ -935,6 +991,10 @@ void cmd_workspace_back_and_forth(I3_CMD) {
  *
  */
 void cmd_workspace_name(I3_CMD, const char *name, const char *_no_auto_back_and_forth) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     const bool no_auto_back_and_forth = (_no_auto_back_and_forth != NULL);
 
     if (strncasecmp(name, "__", strlen("__")) == 0) {
@@ -964,6 +1024,10 @@ void cmd_workspace_name(I3_CMD, const char *name, const char *_no_auto_back_and_
  *
  */
 void cmd_mark(I3_CMD, const char *mark, const char *mode, const char *toggle) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
 
     owindow *current = TAILQ_FIRST(&owindows);
@@ -997,6 +1061,10 @@ void cmd_mark(I3_CMD, const char *mark, const char *mode, const char *toggle) {
  *
  */
 void cmd_unmark(I3_CMD, const char *mark) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     if (match_is_empty(current_match)) {
         con_unmark(NULL, mark);
     } else {
@@ -1016,6 +1084,10 @@ void cmd_unmark(I3_CMD, const char *mark) {
  *
  */
 void cmd_mode(I3_CMD, const char *mode) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("mode=%s\n", mode);
     switch_mode(mode);
 
@@ -1098,6 +1170,10 @@ static void user_output_names_free(user_output_names_head *names) {
  *
  */
 void cmd_move_con_to_output(I3_CMD, const char *name, bool move_workspace) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     /* Initialize a data structure that is used to save multiple user-specified
      * output names since this function is called multiple types for each
      * command call. */
@@ -1149,6 +1225,10 @@ void cmd_move_con_to_output(I3_CMD, const char *name, bool move_workspace) {
  *
  */
 void cmd_move_con_to_mark(I3_CMD, const char *mark) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("moving window to mark \"%s\"\n", mark);
 
     HANDLE_EMPTY_MATCH;
@@ -1169,6 +1249,10 @@ void cmd_move_con_to_mark(I3_CMD, const char *mark) {
  *
  */
 void cmd_floating(I3_CMD, const char *floating_mode) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     owindow *current;
 
     DLOG("floating_mode=%s\n", floating_mode);
@@ -1200,6 +1284,10 @@ void cmd_floating(I3_CMD, const char *floating_mode) {
  *
  */
 void cmd_split(I3_CMD, const char *direction) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
 
     owindow *current;
@@ -1239,6 +1327,10 @@ void cmd_split(I3_CMD, const char *direction) {
  *
  */
 void cmd_kill(I3_CMD, const char *kill_mode_str) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     if (kill_mode_str == NULL)
         kill_mode_str = "window";
 
@@ -1271,6 +1363,10 @@ void cmd_kill(I3_CMD, const char *kill_mode_str) {
  *
  */
 void cmd_exec(I3_CMD, const char *nosn, const char *command) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     bool no_startup_id = (nosn != NULL);
 
     HANDLE_EMPTY_MATCH;
@@ -1315,6 +1411,10 @@ void cmd_exec(I3_CMD, const char *nosn, const char *command) {
  *
  */
 void cmd_focus_direction(I3_CMD, const char *direction_str) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
     CMD_FOCUS_WARN_CHILDREN;
 
@@ -1353,6 +1453,10 @@ void cmd_focus_direction(I3_CMD, const char *direction_str) {
  *
  */
 void cmd_focus_sibling(I3_CMD, const char *direction_str) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
     CMD_FOCUS_WARN_CHILDREN;
 
@@ -1388,6 +1492,10 @@ void cmd_focus_sibling(I3_CMD, const char *direction_str) {
  *
  */
 void cmd_focus_window_mode(I3_CMD, const char *window_mode) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("window_mode = %s\n", window_mode);
 
     bool to_floating = false;
@@ -1425,6 +1533,10 @@ void cmd_focus_window_mode(I3_CMD, const char *window_mode) {
  *
  */
 void cmd_focus_level(I3_CMD, const char *level) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("level = %s\n", level);
     bool success = false;
 
@@ -1453,6 +1565,10 @@ void cmd_focus_level(I3_CMD, const char *level) {
  *
  */
 void cmd_focus(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("current_match = %p\n", current_match);
 
     if (match_is_empty(current_match)) {
@@ -1500,6 +1616,10 @@ void cmd_focus(I3_CMD) {
  *
  */
 void cmd_fullscreen(I3_CMD, const char *action, const char *fullscreen_mode) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     fullscreen_mode_t mode = strcmp(fullscreen_mode, "global") == 0 ? CF_GLOBAL : CF_OUTPUT;
     DLOG("%s fullscreen, mode = %s\n", action, fullscreen_mode);
     owindow *current;
@@ -1527,6 +1647,10 @@ void cmd_fullscreen(I3_CMD, const char *action, const char *fullscreen_mode) {
  *
  */
 void cmd_sticky(I3_CMD, const char *action) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("%s sticky on window\n", action);
     HANDLE_EMPTY_MATCH;
 
@@ -1565,6 +1689,10 @@ void cmd_sticky(I3_CMD, const char *action) {
  *
  */
 void cmd_move_direction(I3_CMD, const char *direction_str, long amount, const char *mode) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     owindow *current;
     HANDLE_EMPTY_MATCH;
 
@@ -1617,6 +1745,10 @@ void cmd_move_direction(I3_CMD, const char *direction_str, long amount, const ch
  *
  */
 void cmd_layout(I3_CMD, const char *layout_str) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
 
     layout_t layout;
@@ -1648,6 +1780,10 @@ void cmd_layout(I3_CMD, const char *layout_str) {
  *
  */
 void cmd_layout_toggle(I3_CMD, const char *toggle_mode) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     owindow *current;
 
     if (toggle_mode == NULL)
@@ -1675,6 +1811,10 @@ void cmd_layout_toggle(I3_CMD, const char *toggle_mode) {
  *
  */
 void cmd_exit(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     LOG("Exiting due to user command.\n");
     exit(EXIT_SUCCESS);
 
@@ -1686,6 +1826,10 @@ void cmd_exit(I3_CMD) {
  *
  */
 void cmd_reload(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     LOG("reloading\n");
 
     kill_nagbar(config_error_nagbar_pid, false);
@@ -1716,6 +1860,10 @@ void cmd_reload(I3_CMD) {
  *
  */
 void cmd_restart(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     LOG("restarting i3\n");
     int exempt_fd = -1;
     if (cmd_output->client != NULL) {
@@ -1748,6 +1896,10 @@ void cmd_restart(I3_CMD) {
  *
  */
 void cmd_open(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     LOG("opening new container\n");
     Con *con = tree_open_con(NULL, NULL);
     con->layout = L_SPLITH;
@@ -1768,6 +1920,10 @@ void cmd_open(I3_CMD) {
  *
  */
 void cmd_focus_output(I3_CMD, const char *name) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     static user_output_names_head names = TAILQ_HEAD_INITIALIZER(names);
     if (name) {
         user_output_names_add(&names, name);
@@ -1817,6 +1973,10 @@ void cmd_focus_output(I3_CMD, const char *name) {
  *
  */
 void cmd_move_window_to_position(I3_CMD, long x, const char *mode_x, long y, const char *mode_y) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     bool has_error = false;
 
     owindow *current;
@@ -1856,6 +2016,10 @@ void cmd_move_window_to_position(I3_CMD, long x, const char *mode_x, long y, con
  *
  */
 void cmd_move_window_to_center(I3_CMD, const char *method) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     bool has_error = false;
     HANDLE_EMPTY_MATCH;
 
@@ -1900,6 +2064,10 @@ void cmd_move_window_to_center(I3_CMD, const char *method) {
  *
  */
 void cmd_move_window_to_mouse(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
 
     owindow *current;
@@ -1924,6 +2092,10 @@ void cmd_move_window_to_mouse(I3_CMD) {
  *
  */
 void cmd_move_scratchpad(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("should move window to scratchpad\n");
     owindow *current;
 
@@ -1944,6 +2116,10 @@ void cmd_move_scratchpad(I3_CMD) {
  *
  */
 void cmd_scratchpad_show(I3_CMD) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("should show scratchpad window\n");
     owindow *current;
     bool result = false;
@@ -1967,6 +2143,10 @@ void cmd_scratchpad_show(I3_CMD) {
  *
  */
 void cmd_swap(I3_CMD, const char *mode, const char *arg) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     HANDLE_EMPTY_MATCH;
 
     owindow *match = TAILQ_FIRST(&owindows);
@@ -2025,6 +2205,10 @@ void cmd_swap(I3_CMD, const char *mode, const char *arg) {
  *
  */
 void cmd_title_format(I3_CMD, const char *format) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     DLOG("setting title_format to \"%s\"\n", format);
     HANDLE_EMPTY_MATCH;
 
@@ -2068,6 +2252,10 @@ void cmd_title_format(I3_CMD, const char *format) {
  *
  */
 void cmd_title_window_icon(I3_CMD, const char *enable, int padding) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     bool is_toggle = false;
     if (enable != NULL) {
         if (strcmp(enable, "toggle") == 0) {
@@ -2117,6 +2305,10 @@ void cmd_title_window_icon(I3_CMD, const char *enable, int padding) {
  *
  */
 void cmd_rename_workspace(I3_CMD, const char *old_name, const char *new_name) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     if (strncasecmp(new_name, "__", strlen("__")) == 0) {
         yerror("Cannot rename workspace to \"%s\": names starting with __ are i3-internal.", new_name);
         return;
@@ -2210,6 +2402,10 @@ void cmd_rename_workspace(I3_CMD, const char *old_name, const char *new_name) {
  *
  */
 void cmd_bar_mode(I3_CMD, const char *bar_mode, const char *bar_id) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     int mode = M_DOCK;
     bool toggle = false;
     if (strcmp(bar_mode, "dock") == 0)
@@ -2269,6 +2465,10 @@ void cmd_bar_mode(I3_CMD, const char *bar_mode, const char *bar_id) {
  *
  */
 void cmd_bar_hidden_state(I3_CMD, const char *bar_hidden_state, const char *bar_id) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     int hidden_state = S_SHOW;
     bool toggle = false;
     if (strcmp(bar_hidden_state, "hide") == 0)
@@ -2326,6 +2526,10 @@ void cmd_bar_hidden_state(I3_CMD, const char *bar_hidden_state, const char *bar_
  *
  */
 void cmd_shmlog(I3_CMD, const char *argument) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     if (!strcmp(argument, "toggle"))
         /* Toggle shm log, if size is not 0. If it is 0, set it to default. */
         shmlog_size = shmlog_size ? -shmlog_size : default_shmlog_size;
@@ -2358,6 +2562,10 @@ void cmd_shmlog(I3_CMD, const char *argument) {
  *
  */
 void cmd_debuglog(I3_CMD, const char *argument) {
+    if(cmd_output->execution_toggled) {
+        ysuccess(true);
+        return;
+    }
     bool logging = get_debug_logging();
     if (!strcmp(argument, "toggle")) {
         LOG("%s debug logging\n", logging ? "Disabling" : "Enabling");
@@ -2369,6 +2577,177 @@ void cmd_debuglog(I3_CMD, const char *argument) {
         LOG("Disabling debug logging\n");
         set_debug_logging(false);
     }
+    // XXX: default reply for now, make this a better reply
+    ysuccess(true);
+}
+
+/*******************************************************************************
+ * Variable and Branching functions.
+ ******************************************************************************/
+
+
+/*
+ * The linked-list that contains each variable and its value.
+ */
+variables_head variable_list_head = {NULL, NULL};
+
+/*
+ * Implementation of 'if <variable>'
+ */
+void cmd_if(I3_CMD, const char *variable_name) {
+
+    if(TAILQ_FIRST(&variable_list_head) == NULL) {
+        yerror("Variables must be setup before being used.");
+        return;
+    }
+
+    struct variable* variable = NULL;
+    bool variable_found = false;
+    
+    TAILQ_FOREACH(variable, &variable_list_head, variables) {
+		if (strcmp(variable->variable_name, variable_name) == 0) {
+            variable_found = true;
+            break;
+		}
+	}
+
+    if(!variable_found) {
+        yerror("Unable to find a variable with the specified name.");
+        return;
+    }
+
+    // If the condition is true, execution should not be toggled.
+    cmd_output->execution_toggled = !variable->value;
+
+    // XXX: default reply for now, make this a better reply
+    ysuccess(true);
+}
+
+/*
+ * Implementation of 'ifn <variable>'
+ */
+void cmd_ifn(I3_CMD, const char *variable_name) {
+
+    if(TAILQ_FIRST(&variable_list_head) == NULL) {
+        yerror("Variables must be setup before being used.");
+        return;
+    }
+
+    struct variable* variable = NULL;
+    bool variable_found = false;
+    
+    TAILQ_FOREACH(variable, &variable_list_head, variables) {
+		if (strcmp(variable->variable_name, variable_name) == 0) {
+            variable_found = true;
+            break;
+		}
+	}
+
+    if(!variable_found) {
+        yerror("Unable to find a variable with the specified name.");
+        return;
+    }
+
+    // If the condition is not true, execution should not be toggled.
+    cmd_output->execution_toggled = variable->value;
+
+    // XXX: default reply for now, make this a better reply
+    ysuccess(true);
+}
+
+/*
+ * Implementation of 'else'
+ */
+void cmd_else(I3_CMD) {
+
+    // TODO Require an "if" before an "else". Currently the command "x; else"
+
+    cmd_output->execution_toggled = !cmd_output->execution_toggled;
+
+    // XXX: default reply for now, make this a better reply
+    ysuccess(true);
+}
+
+/*
+ * Implementation of 'finally'
+ */
+void cmd_finally(I3_CMD) {
+
+    // TODO Require an "if" before a "finally".
+
+    cmd_output->execution_toggled = false;
+
+    // XXX: default reply for now, make this a better reply
+    ysuccess(true);
+}
+
+/*
+ * Implementation of 'setup_variable <variable>'
+ */
+void cmd_setup_variable(I3_CMD, const char *variable_name) {
+
+    // If the list hasn't been initialized, initialize it.
+    if(TAILQ_EMPTY(&variable_list_head)) {
+	    TAILQ_INIT(&variable_list_head);
+    }
+
+    struct variable* variable = NULL;
+    bool variable_found = false;
+    
+    TAILQ_FOREACH(variable, &variable_list_head, variables) {
+		if (strcmp(variable->variable_name, variable_name) == 0) {
+            variable_found = true;
+            break;
+		}
+	}
+
+    if(variable_found) {
+        yerror("Unable to setup variable because a variable with that name already exists.");
+        return;
+    }
+    
+    variable = scalloc(1, sizeof(struct variable));
+    
+    int variable_length = strlen(variable_name);
+    variable->variable_name = scalloc(1, variable_length + 1);
+    variable->value = false;
+    strncpy(variable->variable_name, variable_name, variable_length);
+    // String is already null-terminated because calloc fills with \0.
+    
+    TAILQ_INSERT_TAIL(&variable_list_head, variable, variables);
+
+    // XXX: default reply for now, make this a better reply
+    ysuccess(true);
+}
+
+/*
+ * Implementation of 'toggle <variable>'
+ * 
+ */
+void cmd_toggle_variable(I3_CMD, const char *variable_name) {
+
+    if(TAILQ_FIRST(&variable_list_head) == NULL) {
+        yerror("Variables must be setup before being used.");
+        return;
+    }
+
+    struct variable* variable = NULL;
+    bool variable_found = false;
+    
+    TAILQ_FOREACH(variable, &variable_list_head, variables) {
+		if (strcmp(variable->variable_name, variable_name) == 0) {
+            variable_found = true;
+            break;
+		}
+	}
+
+    if(!variable_found) {
+        yerror("Unable to find a variable with the specified name.");
+        return;
+    }
+
+    variable->value = !variable->value;
+
     // XXX: default reply for now, make this a better reply
     ysuccess(true);
 }

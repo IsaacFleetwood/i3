@@ -53,6 +53,8 @@ state INITIAL:
   'ipc_kill_timeout'                       -> IPC_KILL_TIMEOUT
   'restart_state'                          -> RESTART_STATE
   'popup_during_fullscreen'                -> POPUP_DURING_FULLSCREEN
+  'setup_variable'                         -> VARIABLE
+  'toggle'                                 -> TOGGLE
   exectype = 'exec_always', 'exec'         -> EXEC
   colorclass = 'client.background'
       -> COLOR_SINGLE
@@ -659,3 +661,11 @@ state BAR_COLORS_TEXT:
       -> call cfg_bar_color($colorclass, $border, $background, NULL); BAR_COLORS
   text = word
       -> call cfg_bar_color($colorclass, $border, $background, $text); BAR_COLORS
+
+state VARIABLE:
+  variable = word
+      -> call cfg_setup_variable($variable)
+
+state TOGGLE:
+  variable = word
+      -> call cfg_toggle_variable($variable)

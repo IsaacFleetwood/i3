@@ -43,6 +43,12 @@ state INITIAL:
   'title_window_icon' -> TITLE_WINDOW_ICON
   'mode' -> MODE
   'bar' -> BAR
+  'if' -> IF
+  'ifn' -> IFN
+  'else' -> call cmd_else()
+  'finally' -> call cmd_finally()
+  'setup_variable' -> VARIABLE
+  'toggle' -> TOGGLE
 
 state CRITERIA:
   ctype = 'class'       -> CRITERION
@@ -507,3 +513,19 @@ state BAR_MODE_ID:
       ->
   end
       -> call cmd_bar_mode($bar_value, $bar_id)
+
+state IF:
+  variable = word
+      -> call cmd_if($variable)
+  
+state IFN:
+  variable = word
+      -> call cmd_ifn($variable)
+
+state VARIABLE:
+  variable = word
+      -> call cmd_setup_variable($variable)
+
+state TOGGLE:
+  variable = word
+      -> call cmd_toggle_variable($variable)

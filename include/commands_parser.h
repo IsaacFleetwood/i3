@@ -33,6 +33,9 @@ struct CommandResultIR {
 
     /* Whether the command requires calling tree_render. */
     bool needs_tree_render;
+    
+    /* Whether the current command should stop executing because of a branching subcommand. */
+    bool execution_toggled;
 };
 
 typedef struct CommandResult CommandResult;

@@ -10,8 +10,25 @@
 #pragma once
 
 #include <config.h>
+#include <stdbool.h>
 
+#include "queue.h"
 #include "commands_parser.h"
+
+/*
+ * Data structure for storing variables and their states.
+ */
+struct variable {
+	char* variable_name;
+  bool value;
+	TAILQ_ENTRY(variable) variables;
+};
+
+/*
+ * The linked-list that contains each variable and its value.
+ */
+typedef TAILQ_HEAD(variable_list_head, variable) variables_head;
+extern variables_head variable_list_head;
 
 /** The beginning of the prototype for every cmd_ function. */
 #define I3_CMD Match *current_match, struct CommandResultIR *cmd_output
@@ -337,3 +354,39 @@ void cmd_debuglog(I3_CMD, const char *argument);
  *
  */
 void cmd_title_window_icon(I3_CMD, const char *enable, int padding);
+
+/*
+ * Implementation of 'if <variable>'
+ *
+ */
+void cmd_if(I3_CMD, const char *variable_name);
+
+/*
+ * Implementation of 'ifn <variable>'
+ *
+ */
+void cmd_ifn(I3_CMD, const char *variable_name);
+
+/*
+ * Implementation of 'else'
+ *
+ */
+void cmd_else(I3_CMD);
+
+/*
+ * Implementation of 'else'
+ *
+ */
+void cmd_finally(I3_CMD);
+
+/*
+ * Implementation of 'setup_variable <variable>'
+ *
+ */
+void cmd_setup_variable(I3_CMD, const char *variable_name);
+
+/*
+ * Implementation of 'toggle <variable>'
+ * 
+ */
+void cmd_toggle_variable(I3_CMD, const char *variable_name);

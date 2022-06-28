@@ -242,8 +242,10 @@ CommandResult *parse_command(const char *input, yajl_gen gen, ipc_client *client
     state = INITIAL;
     CommandResult *result = scalloc(1, sizeof(CommandResult));
 
+    subcommand_output.execution_toggled = false;
+    
     command_output.client = client;
-
+    
     /* A YAJL JSON generator used for formatting replies. */
     command_output.json_gen = gen;
 
@@ -269,7 +271,7 @@ CommandResult *parse_command(const char *input, yajl_gen gen, ipc_client *client
                 *walk == '\r' || *walk == '\n') &&
                *walk != '\0')
             walk++;
-
+        
         cmdp_token_ptr *ptr = &(tokens[state]);
         token_handled = false;
         for (c = 0; c < ptr->n; c++) {

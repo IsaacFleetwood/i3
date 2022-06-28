@@ -8,6 +8,8 @@
  *
  */
 #include "all.h"
+#include "commands.h"
+#include "commands_parser.h"
 
 #include <wordexp.h>
 
@@ -759,4 +761,66 @@ CFGFUN(bar_finish) {
     TAILQ_INSERT_TAIL(&barconfigs, current_bar, configs);
     /* Simply reset the pointer, but don't free the resources. */
     current_bar = NULL;
+}
+
+CFGFUN(setup_variable, const char *variable_name) {
+
+    // If the list hasn't been initialized, initialize it.
+    if(TAILQ_EMPTY(&variable_list_head)) {
+	    TAILQ_INIT(&variable_list_head);
+    }
+
+    struct variable* variable = NULL;
+    bool variable_found = false;
+    
+    TAILQ_FOREACH(variable, &variable_list_head, variables) {
+		if (strcmp(variable->variable_name, variable_name) == 0) {
+            variable_found = true;
+            break;
+		}
+	}
+
+    if(variable_found) {
+        ELOG("Invalid variable in setup_variable '%s'. Variable has already been setup.\n", variable_name);
+        result->has_errors = true;
+        return;
+    }
+    
+    variable = scalloc(1, sizeof(struct variable));
+    
+    int variable_length = strlen(variable_name);
+    variable->variable_name = scalloc(1, variable_length + 1);
+    variable->value = false;
+    strncpy(variable->variable_name, variable_name, variable_length);
+    // String is already null-terminated because calloc fills with \0.
+    
+    TAILQ_INSERT_TAIL(&variable_list_head, variable, variables);
+
+}
+
+CFGFUN(toggle_variable, const char *variable_name) {
+    
+    if(TAILQ_FIRST(&variable_list_head) == NULL) {
+        ELOG("Invalid variable in toggle_variable '%s'. Must use setup_variable before.\n", variable_name);
+        result->has_errors = true;
+        return;
+    }
+
+    struct variable* variable = NULL;
+    bool variable_found = false;
+    
+    TAILQ_FOREACH(variable, &variable_list_head, variables) {
+		if (strcmp(variable->variable_name, variable_name) == 0) {
+            variable_found = true;
+            break;
+		}
+	}
+
+    if(!variable_found) {
+        ELOG("Invalid variable in toggle_variable '%s'. Must use setup_variable before.\n", variable_name);
+        result->has_errors = true;
+        return;
+    }
+
+    variable->value = !variable->value;
 }
